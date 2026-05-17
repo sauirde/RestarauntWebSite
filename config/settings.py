@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ---------------------------------------------------------------------------
 env = environ.Env(
     DEBUG=(bool, False),
-    ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
+    ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1", "healthcheck.railway.app", ".railway.app"]),
     CORS_ALLOWED_ORIGINS=(list, []),
 )
 
@@ -217,7 +217,7 @@ if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     # SSL-redirect/HSTS можно временно выключить через .env, пока не
     # настроен TLS (иначе при HTTP-only будет бесконечный редирект).
-    SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)
+    SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)
     SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=True)
     CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=True)
     SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=31536000)
