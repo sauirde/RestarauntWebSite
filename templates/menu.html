@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Меню — Bereke · Авторская аутентичная кухня</title>
+<meta name="description" content="Меню казахского ресторана Bereke: закуски, супы, горячее, десерты, напитки.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000000;--bg-2:#0D0D0D;--surface:#181818;--line:#333333;
+    --gold:#AEA79A;--gold-bright:#AEA79A;--text:#FFFFFF;--muted:#C6D2EC;
+    --serif-head:'Playfair Display',Georgia,'Times New Roman',serif;
+    --serif-body:'Cormorant Garamond',Georgia,serif;
+    --ornament:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='24' viewBox='0 0 120 24'%3E%3Cg fill='none' stroke='%23AEA79A' stroke-width='1.4'%3E%3Cpath d='M0 12h36'/%3E%3Cpath d='M84 12h36'/%3E%3Cpath d='M60 2c-7 0-9 7-4 9 4 1.6 7-2 4-4M60 22c-7 0-9-7-4-9 4-1.6 7 2 4 4'/%3E%3Ccircle cx='60' cy='12' r='2.4' fill='%23AEA79A' stroke='none'/%3E%3Cpath d='M44 12c0-6 5-8 8-5M76 12c0 6-5 8-8 5'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--serif-body);
+    font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.brand{font-family:var(--serif-head);font-weight:600;line-height:1.18}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{width:min(1280px,93vw);margin:0 auto}
+  .gold{color:var(--gold)}
+  .ornament{height:24px;background:var(--ornament) repeat-x center;
+    background-size:auto 24px;opacity:.8}
+  .btn{display:inline-block;font-family:Georgia,'Times New Roman',serif;font-size:14px;
+    letter-spacing:.18em;text-transform:uppercase;padding:13px 28px;
+    border:1px solid #b0a898;color:#d4cfc8;background:transparent;
+    cursor:pointer;transition:background .35s ease,border-color .35s ease,color .35s ease}
+  .btn:hover{background:rgba(176,168,152,.14);color:#d4cfc8;border-color:#b0a898}
+
+  /* HEADER (стиль главной) */
+  header{position:fixed;inset:0 0 auto 0;z-index:50;padding:18px 0;
+    background:rgba(0,0,0,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between}
+  .brand{font-size:26px;letter-spacing:.34em;color:var(--gold-bright)}
+  .brand small{display:block;font-family:var(--serif-body);font-size:10px;
+    letter-spacing:.4em;color:var(--muted);text-align:center;margin-top:2px}
+  .topnav{display:flex;gap:34px;list-style:none;align-items:center}
+  .topnav a{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
+  .topnav a:hover{color:var(--gold-bright)}
+
+  /* PAGE TITLE */
+  .page-head{padding:150px 0 50px;text-align:center}
+  .eyebrow{font-family:var(--serif-head);letter-spacing:.32em;text-transform:uppercase;
+    font-size:12px;color:var(--gold);margin-bottom:16px}
+  .page-head h1{font-size:clamp(34px,5.4vw,60px)}
+  .page-head .ornament{max-width:260px;margin:26px auto 0}
+
+  /* LAYOUT: sidebar + content */
+  .layout{display:grid;grid-template-columns:240px 1fr;gap:54px;
+    padding-bottom:110px;align-items:start}
+  .sidebar{position:sticky;top:104px}
+  .sidebar h3{font-size:14px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:20px}
+  .cat-list{list-style:none;display:flex;flex-direction:column}
+  .cat-list a{display:block;padding:13px 16px;font-family:var(--serif-head);
+    font-size:17px;color:var(--text);border-left:2px solid var(--line);
+    transition:.25s}
+  .cat-list a:hover{color:var(--gold-bright);border-color:var(--gold)}
+  .cat-list a.active{color:var(--gold-bright);border-color:var(--gold);
+    background:linear-gradient(90deg,rgba(228,224,217,.12),transparent)}
+
+  .cat-section{scroll-margin-top:108px;margin-bottom:64px}
+  .cat-section > h2{font-size:clamp(26px,3.4vw,40px);margin-bottom:8px}
+  .cat-section > .ornament{max-width:160px;margin:0 0 32px;opacity:.6}
+
+  /* RESPONSIVE GRID 3 / 2 / 1 */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  @media(max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.grid{grid-template-columns:1fr}}
+
+  /* DISH CARD */
+  .card{background:var(--surface);border:1px solid var(--line);
+    display:flex;flex-direction:column;transition:.3s}
+  .card:hover{border-color:var(--gold);transform:translateY(-4px)}
+  .card .ph{aspect-ratio:4/3;background:linear-gradient(135deg,#1A1A1A,#0D0D0D);
+    position:relative;overflow:hidden}
+  .card .ph img{width:100%;height:100%;object-fit:cover}
+  .card .ph .noimg{position:absolute;inset:0;display:flex;align-items:center;
+    justify-content:center;color:var(--line);font-family:var(--serif-head);
+    letter-spacing:.24em;font-size:12px;text-transform:uppercase}
+  .badge{position:absolute;top:12px;left:12px;background:var(--gold);
+    color:#000000;font-family:var(--serif-head);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;padding:5px 12px}
+  .card-body{padding:22px 22px 24px;display:flex;flex-direction:column;flex:1}
+  .card-top{display:flex;justify-content:space-between;gap:14px;align-items:baseline}
+  .card-top h3{font-size:22px}
+  .price{font-family:var(--serif-head);color:var(--gold-bright);font-size:20px;
+    white-space:nowrap}
+  .desc{color:var(--muted);font-size:16px;margin:12px 0 18px;flex:1}
+  .weight{font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+  .empty{color:var(--muted);font-style:italic;padding:30px 0}
+
+  /* SKELETON */
+  @keyframes shimmer{100%{background-position:200% 0}}
+  .sk{background:linear-gradient(90deg,#181818 25%,#262626 37%,#181818 63%);
+    background-size:200% 100%;animation:shimmer 1.4s infinite linear}
+  .sk-card .ph{aspect-ratio:4/3}
+  .sk-line{height:14px;margin:14px 22px 0;border-radius:2px}
+  .sk-line.sm{width:40%}.sk-line.lg{width:75%}.sk-line.md{width:90%;height:11px}
+
+  footer{background:#000000;border-top:1px solid var(--line);
+    text-align:center;padding:54px 0 34px}
+  .f-brand{font-family:var(--serif-head);font-size:24px;letter-spacing:.32em;
+    color:var(--gold-bright)}
+  .copy{color:#A9BCE6;font-size:13px;letter-spacing:.16em;margin-top:18px}
+
+  @media(max-width:860px){
+    .topnav{display:none}
+    .layout{grid-template-columns:1fr;gap:20px}
+    .sidebar{position:sticky;top:70px;z-index:30;
+      background:rgba(0,0,0,.96);backdrop-filter:blur(6px);
+      margin:0 -4vw;padding:14px 4vw;border-bottom:1px solid var(--line)}
+    .sidebar h3{display:none}
+    .cat-list{flex-direction:row;gap:6px;overflow-x:auto;scrollbar-width:none}
+    .cat-list::-webkit-scrollbar{display:none}
+    .cat-list a{white-space:nowrap;border-left:0;border-bottom:2px solid var(--line);
+      padding:10px 14px;font-size:15px}
+    .cat-list a.active{background:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="/" class="brand">BEREKE<small>қазақ мейрамханасы</small></a>
+    <ul class="topnav">
+      <li><a href="/#about">О ресторане</a></li>
+      <li><a href="/menu/" class="gold">Меню</a></li>
+      <li><a href="/#gallery">Галерея</a></li>
+      <li><a href="/#contacts">Контакты</a></li>
+      <li><a href="/#reserve" class="btn" style="padding:10px 22px">Забронировать</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="wrap page-head">
+  <div class="eyebrow">Меню</div>
+  <h1>Авторская <span class="gold">аутентичная</span> кухня</h1>
+  <div class="ornament"></div>
+</div>
+
+<div class="wrap layout">
+  <aside class="sidebar">
+    <h3>Категории</h3>
+    <ul class="cat-list" id="catList">
+      <li><a class="sk" style="height:44px;border-left:0">&nbsp;</a></li>
+      <li><a class="sk" style="height:44px;border-left:0;margin-top:6px">&nbsp;</a></li>
+      <li><a class="sk" style="height:44px;border-left:0;margin-top:6px">&nbsp;</a></li>
+    </ul>
+  </aside>
+
+  <main id="content">
+    <!-- скелет на время загрузки -->
+    <div class="grid" id="skeleton"></div>
+  </main>
+</div>
+
+<div class="wrap"><div class="ornament" style="opacity:.4"></div></div>
+
+<footer>
+  <div class="f-brand">BEREKE</div>
+  <div class="copy">© <span id="year"></span> Bereke · Барлық құқықтар қорғалған.</div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  var API='/api/menu/';
+  var content=document.getElementById('content'),
+      catList=document.getElementById('catList'),
+      skeleton=document.getElementById('skeleton');
+
+  // ---- skeleton-карточки сразу ----
+  for(var s=0;s<6;s++){
+    skeleton.insertAdjacentHTML('beforeend',
+      '<div class="card sk-card"><div class="ph sk"></div>'+
+      '<div class="sk-line lg sk"></div><div class="sk-line md sk"></div>'+
+      '<div class="sk-line sm sk"></div><div style="height:18px"></div></div>');
+  }
+
+  function tenge(p){
+    var n=Math.round(parseFloat(p));
+    return new Intl.NumberFormat('ru-RU').format(n)+' ₸';
+  }
+  function esc(s){var d=document.createElement('div');d.textContent=s==null?'':s;return d.innerHTML;}
+
+  // следуем за пагинацией DRF, чтобы собрать все блюда
+  function fetchAll(url,acc){
+    acc=acc||[];
+    return fetch(url).then(function(r){
+      if(!r.ok)throw new Error(r.status);return r.json();
+    }).then(function(d){
+      var page=d.results||d;
+      acc=acc.concat(page);
+      return d.next?fetchAll(d.next,acc):acc;
+    });
+  }
+
+  Promise.all([
+    fetchAll(API+'categories/'),
+    fetchAll(API+'items/')          // <-- fetch('/api/menu/items/')
+  ]).then(function(res){
+    var cats=res[0].sort(function(a,b){return (a.order-b.order)||a.name.localeCompare(b.name);}),
+        items=res[1];
+
+    if(!cats.length){
+      content.innerHTML='<p class="empty">Меню скоро появится.</p>';
+      catList.innerHTML='';return;
+    }
+
+    // группировка блюд по категории
+    var byCat={};
+    items.forEach(function(it){(byCat[it.category]=byCat[it.category]||[]).push(it);});
+
+    // боковая панель
+    catList.innerHTML='';
+    cats.forEach(function(c){
+      catList.insertAdjacentHTML('beforeend',
+        '<li><a href="#cat-'+c.id+'" data-id="'+c.id+'">'+esc(c.name)+'</a></li>');
+    });
+
+    // секции
+    content.innerHTML='';
+    cats.forEach(function(c){
+      var list=byCat[c.id]||[];
+      var cards=list.map(function(it){
+        var img=it.image
+          ? '<img src="'+esc(it.image)+'" alt="'+esc(it.name)+'" loading="lazy">'
+          : '<div class="noimg">Bereke</div>';
+        var badge=it.is_featured?'<span class="badge">Рекомендуем</span>':'';
+        var weight=it.weight?'<div class="weight">'+esc(it.weight)+' г</div>':'';
+        return '<article class="card"><div class="ph">'+img+badge+'</div>'+
+          '<div class="card-body"><div class="card-top">'+
+          '<h3>'+esc(it.name)+'</h3><div class="price">'+tenge(it.price)+'</div></div>'+
+          '<p class="desc">'+esc(it.description||'')+'</p>'+weight+
+          '</div></article>';
+      }).join('');
+      content.insertAdjacentHTML('beforeend',
+        '<section class="cat-section" id="cat-'+c.id+'">'+
+        '<h2>'+esc(c.name)+'</h2><div class="ornament"></div>'+
+        (cards?'<div class="grid">'+cards+'</div>'
+              :'<p class="empty">Блюда этой категории скоро в меню.</p>')+
+        '</section>');
+    });
+
+    initScrollSpy();
+  }).catch(function(){
+    skeleton.remove();
+    content.innerHTML='<p class="empty">Не удалось загрузить меню. '+
+      'Убедитесь, что сервер запущен, и обновите страницу.</p>';
+    catList.innerHTML='';
+  });
+
+  // ---- активная категория при прокрутке (scroll-spy) ----
+  function initScrollSpy(){
+    var links=catList.querySelectorAll('a'),
+        sections=content.querySelectorAll('.cat-section');
+    var map={};links.forEach(function(a){map[a.getAttribute('data-id')]=a;});
+
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var id=en.target.id.replace('cat-','');
+          links.forEach(function(a){a.classList.remove('active');});
+          if(map[id])map[id].classList.add('active');
+        }
+      });
+    },{rootMargin:'-110px 0px -65% 0px'});
+    sections.forEach(function(s){obs.observe(s);});
+
+    // плавный скролл по клику (с учётом sticky-шапки делает scroll-margin-top)
+    links.forEach(function(a){
+      a.addEventListener('click',function(e){
+        var t=document.querySelector(a.getAttribute('href'));
+        if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

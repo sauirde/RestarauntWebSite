@@ -1,0 +1,142 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Bereke Admin') }}{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ===== BEREKE admin theme — black / cream / taupe, serif ===== */
+  :root,
+  :root[data-theme="light"],
+  :root[data-theme="dark"]{
+    --primary:#AEA79A !important;
+    --secondary:#15120e !important;
+    --accent:#b0a898 !important;
+    --primary-fg:#0d0d0d !important;
+
+    --body-fg:#ECE6DA !important;
+    --body-bg:#0b0b0b !important;
+    --body-quiet-color:#9c958a !important;
+    --body-loud-color:#ffffff !important;
+
+    --header-color:#d4cfc8 !important;
+    --header-branding-color:#AEA79A !important;
+    --header-bg:#000000 !important;
+    --header-link-color:#d4cfc8 !important;
+
+    --breadcrumbs-fg:#cfc9bd !important;
+    --breadcrumbs-link-fg:#AEA79A !important;
+    --breadcrumbs-bg:#101010 !important;
+
+    --link-fg:#c9bfae !important;
+    --link-hover-color:#ffffff !important;
+    --link-selected-fg:#ffffff !important;
+
+    --hairline-color:#242424 !important;
+    --border-color:#2c2c2c !important;
+    --error-fg:#e0916b !important;
+
+    --message-success-bg:#13241a !important;
+    --message-warning-bg:#2a2410 !important;
+    --message-error-bg:#2a1515 !important;
+
+    --darkened-bg:#121212 !important;
+    --selected-bg:#1a1a1a !important;
+    --selected-row:#1f1c16 !important;
+
+    --button-bg:#262220 !important;
+    --button-fg:#ECE6DA !important;
+    --button-hover-bg:#34302b !important;
+    --default-button-bg:#AEA79A !important;
+    --default-button-hover-bg:#c4bdae !important;
+    --close-button-bg:#3a3a3a !important;
+    --close-button-hover-bg:#4a4a4a !important;
+    --delete-button-bg:#7a3b34 !important;
+    --delete-button-hover-bg:#92463d !important;
+
+    --object-tools-fg:#0d0d0d !important;
+    --object-tools-bg:#AEA79A !important;
+    --object-tools-hover-bg:#c4bdae !important;
+
+    --font-family-primary:'Cormorant Garamond',Georgia,'Times New Roman',serif !important;
+    --link-fg:#c9bfae !important;
+  }
+
+  body{font-size:15px;letter-spacing:.01em}
+  a:link,a:visited{color:var(--link-fg)}
+
+  /* Header / branding */
+  #header{border-bottom:1px solid #2c2620}
+  #branding #site-name,
+  #branding #site-name a:link,
+  #branding #site-name a:visited{
+    font-family:'Playfair Display',Georgia,serif;
+    font-weight:600;letter-spacing:.34em;color:#AEA79A}
+  #branding #site-name{position:relative}
+  #branding #site-name::after{
+    content:"Қазақ мейрамханасы · админ-панель";
+    display:block;font-family:'Cormorant Garamond',serif;
+    font-size:11px;letter-spacing:.32em;color:#7f7a70;
+    text-transform:uppercase;margin-top:2px}
+
+  /* Modules / section headers */
+  .module{background:#121212;border:1px solid #232323}
+  .module h2,.module caption,.inline-group h2,
+  .inline-group .tabular caption{
+    background:#1a1611;color:#d4cfc8;
+    font-family:'Playfair Display',Georgia,serif;
+    letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+  div.breadcrumbs{background:#101010;color:#cfc9bd;border-bottom:1px solid #232323}
+  div.breadcrumbs a{color:#AEA79A}
+  .dashboard #content .module table th{font-weight:500}
+
+  /* Inputs */
+  input[type=text],input[type=password],input[type=email],input[type=url],
+  input[type=number],input[type=tel],textarea,select,
+  .vTextField,.vDateField,.vTimeField{
+    background:#161412 !important;color:#ECE6DA !important;
+    border:1px solid #3a352f !important;border-radius:2px}
+  input:focus,textarea:focus,select:focus{
+    border-color:#AEA79A !important;outline:1px solid #AEA79A}
+  ::placeholder{color:#6f6a61}
+
+  /* Buttons — luxury outline / solid */
+  .button,input[type=submit],input[type=button],.submit-row input,
+  a.button{border-radius:2px;letter-spacing:.06em}
+  .submit-row input.default,
+  .object-tools a,.button.default{color:#0d0d0d !important;font-weight:600}
+  a.addlink,a.changelink{color:#AEA79A}
+
+  /* Tables / changelist */
+  #changelist table thead th{background:#1a1a1a;border-bottom:1px solid #2c2c2c}
+  #changelist-filter{background:#121212;border-left:1px solid #232323}
+  #changelist-filter h2{background:#1a1611;color:#d4cfc8}
+  tr.row1{background:#0e0e0e}tr.row2{background:#131313}
+  .paginator{background:#101010;border-top:1px solid #232323;color:#9c958a}
+  .object-tools a{background:#AEA79A}
+
+  /* Login page */
+  body.login{background:#000}
+  body.login #container{background:#0d0d0d;border:1px solid #2c2620;
+    box-shadow:0 0 0 1px #1a1a1a}
+  body.login #header{background:#000}
+  body.login .submit-row input{width:100%}
+  .login #content{padding:24px}
+
+  /* Messages */
+  ul.messagelist li{border-radius:2px}
+  .selector-chosen h2,.selector-available h2{background:#1a1611;color:#d4cfc8}
+  .calendarbox,.clockbox{background:#141414;border:1px solid #2c2c2c}
+  .calendar td a:hover,.timelist a:hover{background:#AEA79A;color:#0d0d0d}
+</style>
+{% endblock %}
+
+{% block branding %}
+<div id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Bereke') }}</a></div>
+{% if user.is_anonymous %}{% include "admin/color_theme_toggle.html" %}{% endif %}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

@@ -1,0 +1,47 @@
+{% autoescape on %}<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="utf-8"><title>Бронь подтверждена</title></head>
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:Arial,Helvetica,sans-serif;color:#1f2937;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:24px 0;">
+    <tr><td align="center">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;">
+        <tr>
+          <td style="background:#0f766e;padding:24px 32px;color:#ffffff;font-size:20px;font-weight:bold;">
+            Бронь подтверждена ✓
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:32px;">
+            <p style="margin:0 0 16px;font-size:16px;">
+              Здравствуйте, {{ reservation.first_name }} {{ reservation.last_name }}!
+            </p>
+            <p style="margin:0 0 24px;font-size:15px;line-height:1.5;">
+              Мы подтвердили вашу бронь столика. Ждём вас:
+            </p>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:15px;">
+              <tr><td style="padding:6px 0;color:#6b7280;width:160px;">Филиал</td><td style="padding:6px 0;font-weight:bold;">{{ reservation.branch }}</td></tr>
+              <tr><td style="padding:6px 0;color:#6b7280;">Зал</td><td style="padding:6px 0;font-weight:bold;">{{ reservation.hall.name }}</td></tr>
+              <tr><td style="padding:6px 0;color:#6b7280;">Дата</td><td style="padding:6px 0;font-weight:bold;">{{ reservation.date|date:"d.m.Y" }}</td></tr>
+              <tr><td style="padding:6px 0;color:#6b7280;">Время</td><td style="padding:6px 0;font-weight:bold;">{{ reservation.time|time:"H:i" }}</td></tr>
+              <tr><td style="padding:6px 0;color:#6b7280;">Гостей</td><td style="padding:6px 0;font-weight:bold;">{{ reservation.guests_count }}</td></tr>
+            </table>
+            {% if reservation.comment %}
+            <p style="margin:24px 0 0;font-size:14px;color:#6b7280;">
+              Ваш комментарий: {{ reservation.comment }}
+            </p>
+            {% endif %}
+            <p style="margin:28px 0 0;font-size:14px;color:#6b7280;">
+              Если планы изменились — свяжитесь с нами заранее. До встречи!
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#f9fafb;padding:16px 32px;font-size:12px;color:#9ca3af;">
+            Это автоматическое письмо, отвечать на него не нужно.
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>{% endautoescape %}

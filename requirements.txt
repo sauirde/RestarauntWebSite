@@ -1,0 +1,28 @@
+# Core
+Django==4.2.16
+djangorestframework==3.15.2
+
+# Database
+psycopg2-binary==2.9.9
+
+# Configuration
+django-environ==0.11.2
+
+# CORS for SPA / external frontend
+django-cors-headers==4.4.0
+
+# Filtering / search for DRF
+django-filter==24.3
+
+# Drag-and-drop ordering in the admin (GalleryPhoto)
+django-admin-sortable2==2.3.1
+
+# HTTP client for the SMS provider integration
+requests==2.32.3
+
+# Image processing (ImageField requires Pillow)
+Pillow==10.4.0
+
+# Production server
+gunicorn==23.0.0
+whitenoise==6.7.0

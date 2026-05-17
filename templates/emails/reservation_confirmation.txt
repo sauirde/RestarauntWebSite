@@ -1,0 +1,15 @@
+Здравствуйте, {{ reservation.first_name }} {{ reservation.last_name }}!
+
+Ваша бронь столика подтверждена.
+
+Филиал: {{ reservation.branch }}
+Зал:    {{ reservation.hall.name }}
+Дата:   {{ reservation.date|date:"d.m.Y" }}
+Время:  {{ reservation.time|time:"H:i" }}
+Гостей: {{ reservation.guests_count }}
+{% if reservation.comment %}Комментарий: {{ reservation.comment }}{% endif %}
+
+Если планы изменились — свяжитесь с нами заранее. До встречи!
+
+--
+Это автоматическое письмо, отвечать на него не нужно.

@@ -1,0 +1,9 @@
+from rest_framework.routers import SimpleRouter
+
+from .views import CategoryViewSet, MenuItemViewSet
+
+router = SimpleRouter()
+router.register("categories", CategoryViewSet, basename="category")
+router.register("items", MenuItemViewSet, basename="menuitem")
+
+urlpatterns = router.urls

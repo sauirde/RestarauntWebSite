@@ -1,0 +1,13 @@
+Новая бронь #{{ reservation.pk }}
+
+Гость:       {{ reservation.first_name }} {{ reservation.last_name }}
+Телефон:     {{ reservation.phone }}
+Email:       {{ reservation.email|default:"—" }}
+Филиал:      {{ reservation.branch }}
+Зал:         {{ reservation.hall.name }}
+Дата/время:  {{ reservation.date|date:"d.m.Y" }} {{ reservation.time|time:"H:i" }}
+Гостей:      {{ reservation.guests_count }}
+Статус:      {{ reservation.get_status_display }}
+{% if reservation.comment %}Комментарий: {{ reservation.comment }}{% endif %}
+
+Админка: /admin/reservations/reservation/{{ reservation.pk }}/change/
