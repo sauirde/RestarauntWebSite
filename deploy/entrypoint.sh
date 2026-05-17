@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Точка входа контейнера web: ждём БД, применяем миграции,
 # собираем статику, затем запускаем переданную команду (gunicorn).
-set -euo pipefail
+set -uo pipefail
 
 # --- ожидание PostgreSQL -------------------------------------------------
 # Skip nc wait if DB_HOST is not explicitly set (e.g. Railway uses DATABASE_URL).
@@ -19,8 +19,8 @@ else
 fi
 
 # --- миграции и статика --------------------------------------------------
-python manage.py migrate --noinput
-python manage.py collectstatic --noinput
+python manage.py migrate --noinput || echo "WARNING: migrate failed, continuing anyway"
+python manage.py collectstatic --noinput || echo "WARNING: collectstatic failed, continuing anyway"
 
 # --- запуск основного процесса ------------------------------------------
 # Railway injects $PORT; fall back to 8000 for local Docker.
