@@ -28,11 +28,6 @@ COPY . .
 # Каталоги под собранную статику и медиа (монтируются как volume).
 RUN mkdir -p /app/staticfiles /app/media
 
-# Непривилегированный пользователь.
-RUN useradd --system --no-create-home appuser \
-    && chown -R appuser:appuser /app
-USER appuser
-
 EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
