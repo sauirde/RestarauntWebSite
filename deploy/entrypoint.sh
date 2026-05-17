@@ -4,15 +4,19 @@
 set -euo pipefail
 
 # --- ожидание PostgreSQL -------------------------------------------------
-# DB_HOST/DB_PORT берём из окружения (в compose это сервис `db`).
-DB_HOST="${DB_HOST:-db}"
+# Skip nc wait if DB_HOST is not explicitly set (e.g. Railway uses DATABASE_URL).
+DB_HOST="${DB_HOST:-}"
 DB_PORT="${DB_PORT:-5432}"
 
-echo "→ Ожидание базы данных ${DB_HOST}:${DB_PORT} ..."
-until nc -z "$DB_HOST" "$DB_PORT"; do
-  sleep 1
-done
-echo "✓ База доступна"
+if [ -n "$DB_HOST" ]; then
+  echo "→ Ожидание базы данных ${DB_HOST}:${DB_PORT} ..."
+  until nc -z "$DB_HOST" "$DB_PORT"; do
+    sleep 1
+  done
+  echo "✓ База доступна"
+else
+  echo "→ DB_HOST не задан, пропускаем ожидание БД (Railway/managed DB)"
+fi
 
 # --- миграции и статика --------------------------------------------------
 python manage.py migrate --noinput
