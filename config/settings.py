@@ -213,11 +213,9 @@ SMS_TIMEOUT = env.int("SMS_TIMEOUT", default=10)
 # ---------------------------------------------------------------------------
 # Security (hardened automatically when DEBUG is off)
 # ---------------------------------------------------------------------------
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 if not DEBUG:
-    # Доверяем заголовку от nginx, что запрос пришёл по HTTPS.
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    # SSL-redirect/HSTS можно временно выключить через .env, пока не
-    # настроен TLS (иначе при HTTP-only будет бесконечный редирект).
     SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)
     SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=True)
     CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=True)
