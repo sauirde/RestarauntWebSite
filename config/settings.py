@@ -112,6 +112,7 @@ DATABASES = {
     "default": env.db_url("DATABASE_URL", default=_default_db_url),
 }
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("DB_CONN_MAX_AGE", default=60)
+DATABASES["default"].setdefault("OPTIONS", {})["client_encoding"] = "UTF8"
 
 # ---------------------------------------------------------------------------
 # Password validation
