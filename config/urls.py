@@ -1,8 +1,8 @@
 """
 Root URL configuration.
 
-Публичный API смонтирован под /api/. Медиафайлы раздаёт Django только
-в DEBUG-режиме — в продакшене этим занимается веб-сервер.
+Публичный API смонтирован под /api/. Медиафайлы раздаёт Django напрямую
+(whitenoise не охватывает /media/, nginx используется только в docker-compose).
 """
 
 import os
@@ -13,6 +13,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from django.urls import include, path
 from django.views.generic import TemplateView
+from django.views.static import serve
 
 from .api import APIRootView
 
@@ -51,8 +52,12 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),
 ]
 
+# Медиа отдаёт Django напрямую (Railway не имеет nginx).
+urlpatterns += [
+    path("media/<path:path>", serve, {"document_root": settings.MEDIA_ROOT}),
+]
+
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # Admin branding
