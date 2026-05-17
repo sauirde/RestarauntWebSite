@@ -28,6 +28,9 @@ COPY . .
 # Каталоги под собранную статику и медиа (монтируются как volume).
 RUN mkdir -p /app/staticfiles /app/media
 
+# Ensure entrypoint script is executable.
+RUN chmod +x /app/deploy/entrypoint.sh
+
 # Непривилегированный пользователь.
 RUN useradd --system --no-create-home appuser \
     && chown -R appuser:appuser /app
@@ -35,14 +38,9 @@ USER appuser
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
-    CMD python -c "import urllib.request,sys; \
-sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/',timeout=4).status==200 else 1)" \
-    || exit 1
-
 ENTRYPOINT ["/app/deploy/entrypoint.sh"]
 CMD ["gunicorn", "config.wsgi:application", \
-     "--bind", "0.0.0.0:8000", \
+     "--bind", "0.0.0.0:${PORT:-8000}", \
      "--workers", "3", \
      "--timeout", "60", \
      "--access-logfile", "-", \
