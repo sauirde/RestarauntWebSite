@@ -39,19 +39,30 @@ def clean_name(tag) -> str:
 
 
 def get_image_url(product_tag) -> str | None:
-    """Извлекает URL картинки из блока товара Tilda."""
-    # Вариант 1: div с background-image (Tilda t1025)
+    """Извлекает URL полноразмерной картинки из блока товара Tilda."""
+    # Приоритет: data-original (полный размер), data-src, src на img
+    img = product_tag.find("img")
+    if img:
+        url = img.get("data-original") or img.get("data-src")
+        if url and url.startswith("http"):
+            return url
+        # src может быть thumbnail — берём только если не resize
+        src = img.get("src", "")
+        if src.startswith("http") and "resize" not in src:
+            return src
+
+    # Tilda кладёт полный URL в data-original на div с background-image
     for div in product_tag.find_all("div"):
+        url = div.get("data-original") or div.get("data-src")
+        if url and url.startswith("http"):
+            return url
         style = div.get("style", "")
         m = re.search(
             r"background-image:\s*url\(['\"]?(https?://[^'\"\)]+)['\"]?\)", style
         )
-        if m:
+        if m and "resize" not in m.group(1):
             return m.group(1)
-    # Вариант 2: тег <img> с data-original или src
-    img = product_tag.find("img")
-    if img:
-        return img.get("data-original") or img.get("data-src") or img.get("src") or None
+
     return None
 
 
