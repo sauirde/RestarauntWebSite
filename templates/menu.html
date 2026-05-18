@@ -112,22 +112,64 @@
     color:var(--gold-bright)}
   .copy{color:#A9BCE6;font-size:13px;letter-spacing:.16em;margin-top:18px}
 
+  /* HAMBURGER */
+  .burger{display:none;flex-direction:column;justify-content:center;gap:5px;
+    width:40px;height:40px;cursor:pointer;background:none;border:none;padding:4px}
+  .burger span{display:block;height:2px;background:var(--text);
+    transition:transform .3s,opacity .3s}
+  .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .burger.open span:nth-child(2){opacity:0}
+  .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  /* MOBILE NAV OVERLAY */
+  .mobile-nav{display:none;position:fixed;inset:0;z-index:49;
+    background:rgba(0,0,0,.97);flex-direction:column;align-items:center;
+    justify-content:center;gap:0}
+  .mobile-nav.open{display:flex}
+  .mobile-nav a{font-family:var(--serif-head);font-size:28px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--text);padding:18px 0;
+    border-bottom:1px solid var(--line);width:72vw;text-align:center}
+  .mobile-nav a:last-child{margin-top:28px;border:1px solid #b0a898;
+    color:#d4cfc8;padding:14px 32px;width:auto;letter-spacing:.22em;font-size:14px}
+
   @media(max-width:860px){
     .topnav{display:none}
+    .burger{display:flex}
     .layout{grid-template-columns:1fr;gap:20px}
     .sidebar{position:sticky;top:70px;z-index:30;
       background:rgba(0,0,0,.96);backdrop-filter:blur(6px);
-      margin:0 -4vw;padding:14px 4vw;border-bottom:1px solid var(--line)}
+      margin:0 -4vw;padding:12px 4vw;border-bottom:1px solid var(--line)}
     .sidebar h3{display:none}
-    .cat-list{flex-direction:row;gap:6px;overflow-x:auto;scrollbar-width:none}
+    .cat-list{flex-direction:row;gap:6px;overflow-x:auto;scrollbar-width:none;
+      -webkit-overflow-scrolling:touch}
     .cat-list::-webkit-scrollbar{display:none}
     .cat-list a{white-space:nowrap;border-left:0;border-bottom:2px solid var(--line);
-      padding:10px 14px;font-size:15px}
+      padding:10px 16px;font-size:15px;min-height:44px;display:flex;align-items:center}
     .cat-list a.active{background:none}
+    .page-head{padding:100px 0 36px}
+    .page-head h1{font-size:clamp(28px,8vw,44px)}
+    .cat-section > h2{font-size:clamp(22px,6vw,34px)}
+    .card-top{flex-wrap:wrap;gap:6px}
+    .card-top h3{font-size:18px;flex:1 1 100%}
+    .price{font-size:18px}
+    .card-body{padding:16px 16px 18px}
+    .desc{font-size:15px;margin:8px 0 14px}
+  }
+
+  @media(max-width:400px){
+    .card .ph{aspect-ratio:16/9}
   }
 </style>
 </head>
 <body>
+
+<nav class="mobile-nav" id="mobileNav">
+  <a href="/#about" onclick="closeMobileNav()">О ресторане</a>
+  <a href="/menu/" onclick="closeMobileNav()">Меню</a>
+  <a href="/#gallery" onclick="closeMobileNav()">Галерея</a>
+  <a href="/#contacts" onclick="closeMobileNav()">Контакты</a>
+  <a href="/#reserve" onclick="closeMobileNav()">Забронировать</a>
+</nav>
 
 <header>
   <div class="wrap nav">
@@ -139,6 +181,9 @@
       <li><a href="/#contacts">Контакты</a></li>
       <li><a href="/#reserve" class="btn" style="padding:10px 22px">Забронировать</a></li>
     </ul>
+    <button class="burger" id="burger" aria-label="Меню" onclick="toggleMobileNav()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
@@ -288,6 +333,17 @@
     });
   }
 })();
+
+function toggleMobileNav(){
+  var nav=document.getElementById('mobileNav'),b=document.getElementById('burger');
+  nav.classList.toggle('open');b.classList.toggle('open');
+  document.body.style.overflow=nav.classList.contains('open')?'hidden':'';
+}
+function closeMobileNav(){
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('burger').classList.remove('open');
+  document.body.style.overflow='';
+}
 </script>
 </body>
 </html>
