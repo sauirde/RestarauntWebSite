@@ -8,7 +8,6 @@ echo "→ Запуск миграций..."
 # --- миграции и статика --------------------------------------------------
 python manage.py migrate --noinput || echo "WARNING: migrate failed, continuing anyway"
 python manage.py collectstatic --noinput || echo "WARNING: collectstatic failed, continuing anyway"
-python manage.py import_qazaqgourmet --clear || echo "WARNING: menu import failed, continuing anyway"
 
 # --- запуск основного процесса ------------------------------------------
 # Railway injects $PORT; fall back to 8000 for local Docker.

@@ -10,6 +10,7 @@ import re
 
 import requests
 from bs4 import BeautifulSoup
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -34,14 +35,39 @@ def clean_price(raw: str) -> float:
 
 
 def clean_name(tag) -> str:
-    """Извлекает текст имени, убирая вложенные <span> с описанием."""
     return tag.get_text(" ", strip=True)
+
+
+def get_image_url(product_tag) -> str | None:
+    """Извлекает URL картинки из блока товара Tilda."""
+    # Вариант 1: div с background-image (Tilda t1025)
+    for div in product_tag.find_all("div"):
+        style = div.get("style", "")
+        m = re.search(
+            r"background-image:\s*url\(['\"]?(https?://[^'\"\)]+)['\"]?\)", style
+        )
+        if m:
+            return m.group(1)
+    # Вариант 2: тег <img> с data-original или src
+    img = product_tag.find("img")
+    if img:
+        return img.get("data-original") or img.get("data-src") or img.get("src") or None
+    return None
+
+
+def download_image(url: str) -> ContentFile | None:
+    try:
+        resp = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+        resp.raise_for_status()
+        return ContentFile(resp.content)
+    except Exception:
+        return None
 
 
 def parse_menu(html: str) -> list[dict]:
     """
     Возвращает список блюд:
-    [{"category": str, "name": str, "price": float}, ...]
+    [{"category": str, "name": str, "price": float, "image_url": str|None}, ...]
     """
     soup = BeautifulSoup(html, "html.parser")
     result = []
@@ -70,6 +96,7 @@ def parse_menu(html: str) -> list[dict]:
                     "category": current_category,
                     "name": name,
                     "price": price,
+                    "image_url": get_image_url(tag),
                 })
 
     return result
@@ -110,8 +137,9 @@ class Command(BaseCommand):
             category_cache: dict[str, Category] = {}
             created_items = 0
             skipped_items = 0
+            images_saved = 0
 
-            for order, item in enumerate(items):
+            for item in items:
                 cat_name = item["category"]
                 if cat_name not in category_cache:
                     cat, _ = Category.objects.get_or_create(
@@ -121,7 +149,7 @@ class Command(BaseCommand):
                     category_cache[cat_name] = cat
 
                 cat = category_cache[cat_name]
-                _, created = MenuItem.objects.get_or_create(
+                menu_item, created = MenuItem.objects.get_or_create(
                     category=cat,
                     name=item["name"],
                     defaults={"price": item["price"]},
@@ -131,6 +159,17 @@ class Command(BaseCommand):
                 else:
                     skipped_items += 1
 
+                # Скачиваем фото если его ещё нет
+                if item["image_url"] and not menu_item.image:
+                    content = download_image(item["image_url"])
+                    if content:
+                        filename = item["image_url"].split("/")[-1].split("?")[0] or "photo.jpg"
+                        if "." not in filename:
+                            filename += ".jpg"
+                        menu_item.image.save(filename, content, save=True)
+                        images_saved += 1
+
         self.stdout.write(self.style.SUCCESS(
-            f"Готово: добавлено {created_items} блюд, пропущено {skipped_items} (уже существуют)."
+            f"Готово: добавлено {created_items} блюд, пропущено {skipped_items} (уже существуют), "
+            f"скачано {images_saved} фото."
         ))
