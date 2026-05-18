@@ -52,28 +52,34 @@
   .page-head h1{font-size:clamp(34px,5.4vw,60px)}
   .page-head .ornament{max-width:260px;margin:26px auto 0}
 
-  /* LAYOUT: sidebar + content */
-  .layout{display:grid;grid-template-columns:240px 1fr;gap:54px;
-    padding-bottom:110px;align-items:start}
-  .sidebar{position:sticky;top:104px}
-  .sidebar h3{font-size:14px;letter-spacing:.24em;text-transform:uppercase;
-    color:var(--muted);margin-bottom:20px}
-  .cat-list{list-style:none;display:flex;flex-direction:column}
-  .cat-list a{display:block;padding:13px 16px;font-family:var(--serif-head);
-    font-size:17px;color:var(--text);border-left:2px solid var(--line);
-    transition:.25s}
-  .cat-list a:hover{color:var(--gold-bright);border-color:var(--gold)}
-  .cat-list a.active{color:var(--gold-bright);border-color:var(--gold);
-    background:linear-gradient(90deg,rgba(228,224,217,.12),transparent)}
+  /* CATEGORY TABS */
+  .cat-tabs-wrap{position:sticky;top:71px;z-index:30;
+    background:rgba(0,0,0,.96);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);margin-bottom:56px}
+  .cat-list{list-style:none;display:flex;gap:0;overflow-x:auto;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    width:min(1280px,93vw);margin:0 auto}
+  .cat-list::-webkit-scrollbar{display:none}
+  .cat-list a{display:flex;align-items:center;white-space:nowrap;
+    font-family:var(--serif-head);font-size:14px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);padding:16px 20px;
+    border-bottom:2px solid transparent;transition:.25s;min-height:52px}
+  .cat-list a:hover{color:var(--text)}
+  .cat-list a.active{color:var(--gold-bright);border-color:var(--gold)}
 
-  .cat-section{scroll-margin-top:108px;margin-bottom:64px}
+  /* LAYOUT: full-width content */
+  .layout{padding-bottom:110px}
+  .sidebar{display:none}
+
+  .cat-section{scroll-margin-top:130px;margin-bottom:72px}
   .cat-section > h2{font-size:clamp(26px,3.4vw,40px);margin-bottom:8px}
   .cat-section > .ornament{max-width:160px;margin:0 0 32px;opacity:.6}
 
-  /* RESPONSIVE GRID 3 / 2 / 1 */
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
-  @media(max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:620px){.grid{grid-template-columns:1fr}}
+  /* RESPONSIVE GRID 4 / 3 / 2 / 1 */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  @media(max-width:1200px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:500px){.grid{grid-template-columns:1fr}}
 
   /* DISH CARD */
   .card{background:var(--surface);border:1px solid var(--line);
@@ -135,28 +141,20 @@
   @media(max-width:860px){
     .topnav{display:none}
     .burger{display:flex}
-    .layout{grid-template-columns:1fr;gap:20px}
-    .sidebar{position:sticky;top:70px;z-index:30;
-      background:rgba(0,0,0,.96);backdrop-filter:blur(6px);
-      margin:0 -4vw;padding:12px 4vw;border-bottom:1px solid var(--line)}
-    .sidebar h3{display:none}
-    .cat-list{flex-direction:row;gap:6px;overflow-x:auto;scrollbar-width:none;
-      -webkit-overflow-scrolling:touch}
-    .cat-list::-webkit-scrollbar{display:none}
-    .cat-list a{white-space:nowrap;border-left:0;border-bottom:2px solid var(--line);
-      padding:10px 16px;font-size:15px;min-height:44px;display:flex;align-items:center}
-    .cat-list a.active{background:none}
+    .cat-tabs-wrap{top:62px}
+    .cat-list a{font-size:13px;padding:14px 14px;min-height:48px}
+    .cat-section{scroll-margin-top:116px}
     .page-head{padding:100px 0 36px}
     .page-head h1{font-size:clamp(28px,8vw,44px)}
     .cat-section > h2{font-size:clamp(22px,6vw,34px)}
-    .card-top{flex-wrap:wrap;gap:6px}
+    .card-top{flex-wrap:wrap;gap:4px}
     .card-top h3{font-size:18px;flex:1 1 100%}
     .price{font-size:18px}
     .card-body{padding:16px 16px 18px}
     .desc{font-size:15px;margin:8px 0 14px}
   }
 
-  @media(max-width:400px){
+  @media(max-width:500px){
     .card .ph{aspect-ratio:16/9}
   }
 </style>
@@ -193,18 +191,16 @@
   <div class="ornament"></div>
 </div>
 
-<div class="wrap layout">
-  <aside class="sidebar">
-    <h3>Категории</h3>
-    <ul class="cat-list" id="catList">
-      <li><a class="sk" style="height:44px;border-left:0">&nbsp;</a></li>
-      <li><a class="sk" style="height:44px;border-left:0;margin-top:6px">&nbsp;</a></li>
-      <li><a class="sk" style="height:44px;border-left:0;margin-top:6px">&nbsp;</a></li>
-    </ul>
-  </aside>
+<div class="cat-tabs-wrap">
+  <ul class="cat-list" id="catList">
+    <li><a class="sk" style="height:52px;width:120px;border-bottom:0">&nbsp;</a></li>
+    <li><a class="sk" style="height:52px;width:100px;border-bottom:0;margin-left:4px">&nbsp;</a></li>
+    <li><a class="sk" style="height:52px;width:110px;border-bottom:0;margin-left:4px">&nbsp;</a></li>
+  </ul>
+</div>
 
+<div class="wrap layout">
   <main id="content">
-    <!-- скелет на время загрузки -->
     <div class="grid" id="skeleton"></div>
   </main>
 </div>
